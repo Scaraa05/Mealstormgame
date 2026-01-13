@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Mealstorm - Roguelite Culinario | Combatti le Verdure Ribelli</title>
+    <meta name="description" content="Mealstorm è un roguelite d'azione nel quale vestirai i panni di un cuoco coraggioso in missione per sconfiggere verdure impazzite. Mappe uniche, verdure epiche e combattimenti frenetici ti aspettano!">
+    <meta name="keywords" content="mealstorm, roguelite, videogioco indie, gioco d'azione, cuoco, verdure, gaming">
+    <meta name="author" content="Mealstorm Game Studio">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mealstorm.game/">
+    <meta property="og:title" content="Mealstorm - Roguelite Culinario">
+    <meta property="og:description" content="Un cuoco contro verdure ribelli in un roguelite frenetico e colorato. Scopri mappe uniche e combattimenti epici!">
+    <meta property="og:image" content="https://mealstorm.game/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://mealstorm.game/">
+    <meta property="twitter:title" content="Mealstorm - Roguelite Culinario">
+    <meta property="twitter:description" content="Un cuoco contro verdure ribelli in un roguelite frenetico e colorato.">
+    <meta property="twitter:image" content="https://mealstorm.game/twitter-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoGame",
+      "name": "Mealstorm",
+      "description": "Un roguelite d'azione dove un cuoco combatte contro verdure impazzite attraverso mappe uniche e sfide progressivamente difficili",
+      "genre": "Roguelite",
+      "gamePlatform": ["PC"],
+      "offers": {
+        "@type": "Offer",
+        "price": "9.99",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-red: #e63946;
+            --dark-bg: #0a0a0a;
+            --light-text: #ffffff;
+            --hover-red: #d62828;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid var(--primary-red);
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 5px 30px rgba(230, 57, 70, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo-nav {
+            height: 50px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-nav:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-red);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-red);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-red);
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(230, 57, 70, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(230, 57, 70, 0.15) 0%, transparent 50%);
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .logo-hero {
+            max-width: 500px;
+            width: 80%;
+            height: auto;
+            margin-bottom: 2rem;
+            animation: floatLogo 3s ease-in-out infinite, fadeInUp 1s ease;
+            filter: drop-shadow(0 0 30px rgba(230, 57, 70, 0.5));
+        }
+
+        @keyframes floatLogo {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #ddd;
+            animation: fadeInUp 1s ease 0.3s backwards;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.6s backwards;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background: var(--primary-red);
+            color: white;
+            box-shadow: 0 5px 20px rgba(230, 57, 70, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--hover-red);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(230, 57, 70, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light-text);
+            border: 2px solid var(--primary-red);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-red);
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Price Badge */
+        .price-badge {
+            display: inline-block;
+            background: var(--primary-red);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            animation: fadeInUp 1s ease 0.9s backwards;
+            box-shadow: 0 5px 20px rgba(230, 57, 70, 0.4);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--primary-red);
+        }
+
+        /* Carousel */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-image {
+            flex: 0 0 250px;
+            width: 250px;
+            height: 250px;
+        }
+
+        .carousel-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(230, 57, 70, 0.3);
+        }
+
+        .carousel-text {
+            flex: 1;
+        }
+
+        .carousel-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-red);
+        }
+
+        .carousel-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ddd;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .carousel-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-red);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-btn:hover {
+            background: var(--hover-red);
+            transform: scale(1.1);
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary-red);
+            transform: scale(1.3);
+        }
+
+        /* About Section */
+        .about-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(230, 57, 70, 0.2);
+        }
+
+        .about-content p {
+            font-size: 1.2rem;
+            line-height: 2;
+            margin-bottom: 1.5rem;
+            color: #ddd;
+        }
+
+        /* Download Section Background Image */
+        #download .about-content {
+            background: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.7)), 
+                        url('mealstormeye.png') center/cover no-repeat;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 10, 0.98);
+            padding: 2rem;
+            text-align: center;
+            border-top: 2px solid var(--primary-red);
+        }
+
+        footer p {
+            color: #888;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                flex-direction: column;
+                background: rgba(10, 10, 10, 0.98);
+                width: 100%;
+                padding: 2rem;
+                transition: right 0.3s ease;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .logo-hero {
+                max-width: 350px;
+            }
+
+            .hero .tagline {
+                font-size: 1.2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .carousel-item {
+                flex-direction: column;
+                padding: 2rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Parallax effect */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(180deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a0a 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="parallax-bg"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <!-- Qui metterai il tuo logo: <img src="logo.png" alt="Mealstorm Logo" class="logo-nav"> -->
+            <img src="logo_mealstrom.png" alt="Mealstorm Logo" class="logo-nav">
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Gioco</a></li>
+                <li><a href="#maps">Mappe</a></li>
+                <li><a href="#characters">Personaggi</a></li>
+                <li><a href="#download">Download</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <!-- Qui metterai il tuo logo senza sfondo: <img src="logo.png" alt="Mealstorm" class="logo-hero"> -->
+            <img src="logo_mealstrom.png" alt="Mealstorm" class="logo-hero">
+            <p class="tagline">Quando la cucina diventa un campo di battaglia!</p>
+            <div class="cta-buttons">
+                <a href="#download" class="btn btn-primary">Scarica Ora</a>
+                <a href="#about" class="btn btn-secondary">Scopri di Più</a>
+            </div>
+            <div class="price-badge">Solo 4.99€</div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>Il Gioco</h2>
+        <div class="about-content">
+            <p>
+                <strong>Mealstorm</strong>, un roguelite frenetico dove vestirai i panni di un cuoco coraggioso 
+                in missione per salvare il regno culinario da verdure impazzite e ribelli! Imbattiti in una
+                serie di rapide run e scala la classifica per essere il migliore! Cosa stai aspettando? Gettati 
+                nella mischia!
+            </p>
+            <p>
+                Ogni partita è unica: esplora mappe nuove, affronta nemici sempre più difficili, 
+                sblocca nuovi utensili e padroneggia l'arte del combattimento culinario.
+            </p>
+            <p>
+                Con combattimenti veloci, un sistema di progressione avvincente e features uniche
+                Mealstorm offre ore di divertimento per gli amanti dei roguelite e dell'azione arcade!
+            </p>
+        </div>
+    </section>
+
+    <!-- Maps Carousel -->
+    <section id="maps">
+        <h2>Mappe Epiche</h2>
+        <div class="carousel-container">
+            <div class="carousel" id="mapsCarousel">
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Mappa+1" alt="Cucina Infernale">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>?</h3>
+                        <p>
+                            x
+                        </p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Mappa+2" alt="Mercato Oscuro">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>?</h3>
+                        <p>
+                            x
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Mappa+3" alt="Giardino Maledetto">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>?</h3>
+                        <p>
+                            x
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-controls">
+            <button class="carousel-btn" onclick="changeSlide('maps', -1)">‹</button>
+            <button class="carousel-btn" onclick="changeSlide('maps', 1)">›</button>
+        </div>
+        <div class="carousel-dots" id="mapsDots"></div>
+    </section>
+
+    <!-- Characters Carousel -->
+    <section id="characters">
+        <h2>Le Verdure Nemiche</h2>
+        <div class="carousel-container">
+            <div class="carousel" id="charactersCarousel">
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="carota.jpg" alt="Carota malefica">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>Carota malefica</h3>
+                        <p>
+                            Una carota che non penserà due volte prima di attaccarti con le sue radici letali!
+                        </p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Cipolla+Mage" alt="Carota malefica">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>Grano malvagio</h3>
+                        <p>
+                            x
+                        </p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Cipolla+Mage" alt="Grano malvagio">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>latte rancido</h3>
+                        <p>
+                            x
+                        </p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Cipolla+Mage" alt="latte rancido">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>Pomodoro marcio</h3>
+                        <p>
+                            x
+                        </p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Cipolla+Mage" alt="Pomodoro marcio">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>Patata selvaggia</h3>
+                        <p>
+                            x
+                        </p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Broccolo+Warrior" alt="Patata selvaggia">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>Tonno rapido</h3>
+                        <p>
+                            x
+                        </p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Carota+Ninja" alt="Tonno rapido">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>Wasabi piccante</h3>
+                        <p>
+                            x
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-image">
+                        <img src="https://via.placeholder.com/500x300/e63946/ffffff?text=Cipolla+Mage" alt="Wasabi piccante">
+                    </div>
+                    <div class="carousel-text">
+                        <h3>Ramen bollente</h3>
+                        <p>
+                            x
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-controls">
+            <button class="carousel-btn" onclick="changeSlide('characters', -1)">‹</button>
+            <button class="carousel-btn" onclick="changeSlide('characters', 1)">›</button>
+        </div>
+        <div class="carousel-dots" id="charactersDots"></div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download">
+        <h2>Inizia l'Avventura</h2>
+        <div class="about-content" style="text-align: center;">
+            <p style="font-size: 1.5rem; margin-bottom: 2rem;">
+                Scarica Mealstorm ora e preparati a cucinare la vittoria!
+            </p>
+            <div class="price-badge" style="font-size: 2rem; margin-bottom: 2rem;">4.99€</div>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Download per Windows</a>
+                <a href="#" class="btn btn-secondary">Download per Mac</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Mealstorm. Tutti i diritti riservati.</p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Carousel functionality
+        const carousels = {
+            maps: { current: 0, total: 3 },
+            characters: { current: 0, total: 8 }
+        };
+
+        function changeSlide(type, direction) {
+            const carousel = carousels[type];
+            carousel.current += direction;
+            
+            if (carousel.current < 0) {
+                carousel.current = carousel.total - 1;
+            } else if (carousel.current >= carousel.total) {
+                carousel.current = 0;
+            }
+            
+            const carouselElement = document.getElementById(`${type}Carousel`);
+            carouselElement.style.transform = `translateX(-${carousel.current * 100}%)`;
+            
+            updateDots(type);
+        }
+
+        function updateDots(type) {
+            const dots = document.querySelectorAll(`#${type}Dots .dot`);
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === carousels[type].current);
+            });
+        }
+
+        function createDots(type) {
+            const dotsContainer = document.getElementById(`${type}Dots`);
+            const total = carousels[type].total;
+            
+            for (let i = 0; i < total; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => {
+                    carousels[type].current = i;
+                    const carouselElement = document.getElementById(`${type}Carousel`);
+                    carouselElement.style.transform = `translateX(-${i * 100}%)`;
+                    updateDots(type);
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Initialize dots
+        createDots('maps');
+        createDots('characters');
+
+        // Auto-rotate carousels
+        setInterval(() => {
+            changeSlide('maps', 1);
+        }, 7000);
+
+        setInterval(() => {
+            changeSlide('characters', 1);
+        }, 8000);
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.parallax-bg');
+            parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+    </script>
+</body>
+</html>
